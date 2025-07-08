@@ -1,80 +1,90 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-
-namespace Controller
+[RequireComponent(typeof(Rigidbody))]
+public class MotoController : MonoBehaviour
 {
-    
+    private PlayerControls controls;
+    private float throttleInput;
+    private float brakeInput;
+    private float turnInput;
 
+    [Header("Movement")]
+    public float forwardForce = 3000f;
+    public float turnTorque = 1000f;
+    public float brakeTorque = 100f;
 
-    public class PlayerController : MonoBehaviour
+    [Header("ContactPoints")]
+    public Transform frontPoint;
+    public Transform rearPoint;
+    public float groundCheckDistance = 0.2f;
+    public LayerMask groundLayer;
+
+    [Header("Stab")]
+    public float uprightTorque = 500f;
+    public float uprightDamp = 5f;
+
+    private Rigidbody rb;    
+    private bool grounded;
+
+    void Awake()
     {
-        [Header("Movement")]
-        private float forwardForce = 10f;
-        private float TurnTorque = 1f;
-        private float breakingForce = 1f;
-        private float jumpingForce = 1f;
+        rb = GetComponent<Rigidbody>();
+        controls = new PlayerControls();
 
-        [Header("ContactPoints")]
-        public Transform frontPoint;
-        public Transform rearPoint;
-        public float groundCheckDistance = 0.5f;
-        public LayerMask groundLayer;
+        controls.Vehicle.Throttle.performed += ctx => throttleInput = ctx.ReadValue<float>();
+        controls.Vehicle.Throttle.canceled += _ => throttleInput = 0f;
 
-        [Header("Stability")]
-        public float uprightTorque = 5f;
-        public float uprightDamping = 1f;
+        controls.Vehicle.Brake.performed += ctx => brakeInput = ctx.ReadValue<float>();
+        controls.Vehicle.Brake.canceled += _ => brakeInput = 0f;
 
-        private Rigidbody rb;
-
-        private float inputVertical;
-        private float inputHorizontal;
-        private bool grounded;
-
+        controls.Vehicle.Turn.performed += ctx => turnInput = ctx.ReadValue<Vector2>().x;
+        controls.Vehicle.Turn.canceled += _ => turnInput = 0f;
         
-        void Start()
+    }
+
+     void OnEnable() => controls.Vehicle.Enable();
+    private void OnDisable() => controls.Vehicle.Disable();   
+
+    void FixedUpdate()
+    {
+        grounded = IsGrounded();
+
+        Vector3 rotationTorque = Vector3.up * turnInput * turnTorque * Time.fixedDeltaTime;
+
+        Debug.Log("rotation " +  rotationTorque);
+
+        if (grounded)
         {
-            rb = GetComponent<Rigidbody>();
+            rb.AddForce(transform.forward * throttleInput * forwardForce * Time.fixedDeltaTime);
+            //rb.AddTorque(Vector3.up * turnInput * turnTorque * Time.fixedDeltaTime);            
+        }
+        else
+        {
+            //rb.AddTorque(Vector3.up * turnInput * Time.fixedDeltaTime);            
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-            inputVertical = Input.GetAxis("Vertical");
-            inputHorizontal = Input.GetAxis("Horizontal");
+        ApplyUprightTorque(rotationTorque);
+    }
 
-        }
+    bool IsGrounded()
+    {
+       
+        bool frontGrounded = Physics.Raycast(frontPoint.position, Vector3.down, groundCheckDistance, groundLayer);
+        bool rearGrounded = Physics.Raycast(rearPoint.position, Vector3.down, groundCheckDistance, groundLayer);
+        return frontGrounded || rearGrounded;
+    }
 
-        void FixedUpdate()
-        {
-            grounded = IsGrounded();
-            
-            if (grounded)
-            {
-                rb.AddForce(transform.forward * inputVertical * forwardForce * Time.fixedDeltaTime);
-                rb.AddTorque(Vector3.up * inputHorizontal * TurnTorque * Time.fixedDeltaTime);
-            }
-            else
-            {
-                rb.AddTorque(Vector3.up * inputHorizontal * breakingForce * Time.fixedDeltaTime);
-            }
-
-            ApplyUprightTorque();
-
-        }
-
-        bool IsGrounded()
-        {
-            bool frontGrounded = Physics.Raycast(frontPoint.position, Vector3.down, groundCheckDistance, groundLayer);
-            bool rearGrounded = Physics.Raycast(rearPoint.position, Vector3.down, groundCheckDistance, groundLayer);
-            return frontGrounded || rearGrounded;
-        }
-
-        void ApplyUprightTorque()
-        {
-            Vector3 up = transform.up;
-            Vector3 desiredUp = Vector3.up;
-            Vector3 torqueVector = Vector3.Cross(up, desiredUp);
-            rb.AddTorque(torqueVector * uprightTorque - rb.angularVelocity * uprightDamping);
-        }
+    void ApplyUprightTorque(Vector3 rotation)
+    {
+        Vector3 up = transform.up;
+        Vector3 desiredUp = Vector3.up;
+        Vector3 torqueVector = Vector3.Cross(up, desiredUp);
+        rb.AddTorque(torqueVector * uprightTorque - rb.angularVelocity * uprightDamp + rotation);
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(frontPoint.position, frontPoint.position - frontPoint.transform.up * groundCheckDistance);
     }
 }
