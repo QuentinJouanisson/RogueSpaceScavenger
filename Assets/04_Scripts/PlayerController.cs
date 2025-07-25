@@ -14,11 +14,22 @@ public class MotoController : MonoBehaviour
     public float turnTorque = 1000f;
     public float brakeTorque = 100f;
 
+    [Header("TurnLeaning")]
+    public float LeanStrenght = 500f;
+    public float MaxLeanAngle = 45f;
+    public float LeanDamping = 5f;
+
     [Header("ContactPoints")]
     public Transform frontPoint;
     public Transform rearPoint;
     public float groundCheckDistance = 0.2f;
     public LayerMask groundLayer;
+    [Header("Levitation")]
+    public float LevitationForce = 100f;
+    public float DesiredHeight = 1.5f;
+    public float LevitationDamping = 10f;
+    public float LevitationRayLength = 3f;
+    public float gavitationPower = 9.8f;
 
     [Header("Stab")]
     public float uprightTorque = 500f;
@@ -29,7 +40,7 @@ public class MotoController : MonoBehaviour
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();        
         controls = new PlayerControls();
 
         controls.Vehicle.Throttle.performed += ctx => throttleInput = ctx.ReadValue<float>();
@@ -53,18 +64,15 @@ public class MotoController : MonoBehaviour
         Vector3 rotationTorque = Vector3.up * turnInput * turnTorque * Time.fixedDeltaTime;
 
         Debug.Log("rotation " +  rotationTorque);
+        ApplyLevitationForce(frontPoint);
+        ApplyLevitationForce(rearPoint);
 
-        if (grounded)
-        {
-            rb.AddForce(transform.forward * throttleInput * forwardForce * Time.fixedDeltaTime);
-            //rb.AddTorque(Vector3.up * turnInput * turnTorque * Time.fixedDeltaTime);            
-        }
-        else
-        {
-            //rb.AddTorque(Vector3.up * turnInput * Time.fixedDeltaTime);            
-        }
+        rb.AddForce(transform.forward * throttleInput * forwardForce * Time.fixedDeltaTime);
+
+        
 
         ApplyUprightTorque(rotationTorque);
+        ApplyLeanTorque();
     }
 
     bool IsGrounded()
@@ -77,10 +85,53 @@ public class MotoController : MonoBehaviour
 
     void ApplyUprightTorque(Vector3 rotation)
     {
-        Vector3 up = transform.up;
-        Vector3 desiredUp = Vector3.up;
+        Ray ray = new Ray(transform.position, Vector3.down);
+        Physics.Raycast(ray, out RaycastHit depthHit, LevitationRayLength, groundLayer);       
+              
+        Vector3 up = transform.up; 
+        Vector3 desiredUp = depthHit.normal == Vector3.zero ? Vector3.up : depthHit.normal;       
         Vector3 torqueVector = Vector3.Cross(up, desiredUp);
         rb.AddTorque(torqueVector * uprightTorque - rb.angularVelocity * uprightDamp + rotation);
+    }
+
+    void ApplyLevitationForce(Transform LevitationPoint)
+    {
+        Ray ray = new Ray(LevitationPoint.position, Vector3.down);
+        if(Physics.Raycast(ray, out RaycastHit hit, LevitationRayLength, groundLayer))
+        {
+            float currentHeight = hit.distance;
+            float heightError = DesiredHeight - currentHeight;
+            float springforce = Mathf.Max(0f, heightError * LevitationForce);
+
+            Vector3 pointVelocity = rb.GetPointVelocity(LevitationPoint.position);
+            float verticalVelocity = Vector3.Dot(pointVelocity, Vector3.down);
+            float dampingForce = verticalVelocity > 0 ? verticalVelocity * LevitationDamping : 0f;
+
+            Vector3 totalForce = Vector3.up * (springforce - dampingForce);
+            rb.AddForceAtPosition(totalForce, LevitationPoint.position);
+
+            Debug.DrawRay(LevitationPoint.position, Vector3.down * currentHeight, Color.green);
+
+
+        }
+        else
+        {
+            Debug.DrawRay(LevitationPoint.position, Vector3.down, Color.red);
+        }        
+    }
+    void ApplyLeanTorque()
+    {
+        float targetLeanAngle = -turnInput * MaxLeanAngle;
+        float currentLeanAngle = Vector3.SignedAngle(transform.up, Vector3.up, transform.forward);
+        float leanError = targetLeanAngle - currentLeanAngle;
+        float angularLeanVelocity = Vector3.Dot(rb.angularVelocity, transform.forward);
+        float leanTorque = leanError * LeanStrenght - angularLeanVelocity * LeanDamping;
+
+        rb.AddTorque(transform.forward * leanTorque);
+    }
+    void ApplyGravitation()
+    {
+        
     }
     private void OnDrawGizmos()
     {
