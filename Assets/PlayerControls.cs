@@ -1108,6 +1108,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Value"",
+                    ""id"": ""3e3cc232-f285-4c2e-8c76-80dca6df1d9d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -1231,6 +1240,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Turn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5807dcb6-7e50-4484-b299-21fca1ec4cda"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1326,6 +1346,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Vehicle_Throttle = m_Vehicle.FindAction("Throttle", throwIfNotFound: true);
         m_Vehicle_Brake = m_Vehicle.FindAction("Brake", throwIfNotFound: true);
         m_Vehicle_Turn = m_Vehicle.FindAction("Turn", throwIfNotFound: true);
+        m_Vehicle_Jump = m_Vehicle.FindAction("Jump", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -1790,6 +1811,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Vehicle_Throttle;
     private readonly InputAction m_Vehicle_Brake;
     private readonly InputAction m_Vehicle_Turn;
+    private readonly InputAction m_Vehicle_Jump;
     /// <summary>
     /// Provides access to input actions defined in input action map "Vehicle".
     /// </summary>
@@ -1813,6 +1835,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Vehicle/Turn".
         /// </summary>
         public InputAction @Turn => m_Wrapper.m_Vehicle_Turn;
+        /// <summary>
+        /// Provides access to the underlying input action "Vehicle/Jump".
+        /// </summary>
+        public InputAction @Jump => m_Wrapper.m_Vehicle_Jump;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1848,6 +1874,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Turn.started += instance.OnTurn;
             @Turn.performed += instance.OnTurn;
             @Turn.canceled += instance.OnTurn;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
         }
 
         /// <summary>
@@ -1868,6 +1897,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Turn.started -= instance.OnTurn;
             @Turn.performed -= instance.OnTurn;
             @Turn.canceled -= instance.OnTurn;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
         }
 
         /// <summary>
@@ -2143,5 +2175,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTurn(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnJump(InputAction.CallbackContext context);
     }
 }
