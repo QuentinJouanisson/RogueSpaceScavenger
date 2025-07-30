@@ -1,24 +1,37 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 public class MotoController : MonoBehaviour
 {
     private PlayerControls controls;
+
+    public ParticleSystem impactParticles;
+    public ParticleSystem prolongedImpactParticles;
+    public ParticleSystem jumpParticles;
     private float throttleInput;
     private float brakeInput;
     private float turnInput;
     private float jumpInput;
 
+    [Header("UI")]
+    public Slider HoverSlider;
+
     [Header("Movement")]
     public float forwardForce = 3000f;
     public float turnTorque = 1000f;
-    public float brakeTorque = 100f;
+    public float brakeTorque = 50f;
 
-    [Header("jump")]
-    public float jumpForce = 50f;
-    public float maxJumpDuration = 2f;
-    private float jumpTimer = 0f;
+    [Header("HoverThruster")]
+    public float hoverThrustPower = 50f;
+    public float maxHoverThrustPower = 2f;
+    public float hoverThrustRechargeRate = 1f;
+    public float hoverThrustConsumptionRate = 1f;
+
+    private float currentHoverThrusterPower;
+    private bool isHoverThrusting = false;
 
 
     [Header("TurnLeaning")]
@@ -52,6 +65,7 @@ public class MotoController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();        
         controls = new PlayerControls();
+        currentHoverThrusterPower = maxHoverThrustPower;
 
         controls.Vehicle.Throttle.performed += ctx => throttleInput = ctx.ReadValue<float>();
         controls.Vehicle.Throttle.canceled += _ => throttleInput = 0f;
@@ -60,7 +74,7 @@ public class MotoController : MonoBehaviour
         controls.Vehicle.Jump.canceled += _ =>
         {
             jumpInput = 0f;
-            isJumping = false; ;
+            isJumping = false;
         };
 
         controls.Vehicle.Brake.performed += ctx => brakeInput = ctx.ReadValue<float>();
@@ -72,7 +86,14 @@ public class MotoController : MonoBehaviour
     }
 
      void OnEnable() => controls.Vehicle.Enable();
-    private void OnDisable() => controls.Vehicle.Disable();   
+    private void OnDisable() => controls.Vehicle.Disable();
+    private void Update()
+    {
+        if (HoverSlider != null)
+        {
+            HoverSlider.value = (currentHoverThrusterPower/ maxHoverThrustPower) * HoverSlider.maxValue;
+        }
+    }
 
     private void FixedUpdate()
     {
@@ -83,33 +104,66 @@ public class MotoController : MonoBehaviour
         ApplyLevitationForce(frontPoint);
         ApplyLevitationForce(rearPoint);
 
-        rb.AddForce(transform.forward * throttleInput * forwardForce * Time.fixedDeltaTime);
-        
-              
+        if (brakeInput <= 0f)
+        {
+            rb.AddForce(transform.forward * throttleInput * forwardForce * Time.fixedDeltaTime);
+        }
+        else
+        {
+            ApplyBrakeForce();
+        }
+
         ApplyLeanTorque();
         ApplyUprightTorque(rotationTorque);
 
-        if (jumpInput > 0f && !isJumping && canJump)
+        if (jumpInput > 0f && currentHoverThrusterPower > 0f)
         {
-            isJumping = true;
-            jumpTimer = 0f;
-        }
-        if (isJumping)
-        {
-            if (jumpTimer < maxJumpDuration)
+            isHoverThrusting = true;
+
+            if (jumpParticles != null)
             {
-                rb.AddForce(Vector3.up);
+                jumpParticles.Play();
             }
+        }
+        else
+        {
+            isHoverThrusting = false;
+            if(jumpParticles != null && jumpParticles.isPlaying)
+            {
+                jumpParticles.Stop();
+            }
+        }
+
+        if (isHoverThrusting)
+        {
+            rb.AddForce(Vector3.up * hoverThrustPower, ForceMode.Acceleration);
+            currentHoverThrusterPower -= hoverThrustConsumptionRate * Time.fixedDeltaTime;
+            currentHoverThrusterPower = Mathf.Max(0f, currentHoverThrusterPower);
+        }
+
+        if (grounded && !isHoverThrusting && currentHoverThrusterPower < maxHoverThrustPower)
+        {
+            currentHoverThrusterPower += hoverThrustRechargeRate * Time.fixedDeltaTime;
+            currentHoverThrusterPower = Mathf.Min(maxHoverThrustPower, currentHoverThrusterPower);
         }
     }
 
     private bool IsGrounded()
-    {
-       
+    {       
         bool frontGrounded = Physics.Raycast(frontPoint.position, Vector3.down, groundCheckDistance, groundLayer);
         bool rearGrounded = Physics.Raycast(rearPoint.position, Vector3.down, groundCheckDistance, groundLayer);
         return frontGrounded || rearGrounded;
     }    
+    private void ApplyBrakeForce()
+    {
+       float forwardSpeed = Vector3.Dot(rb.linearVelocity, transform.forward);
+        if (forwardSpeed > 0.5f )
+        {
+            Vector3 forwardVelocity = transform.forward * forwardSpeed;
+            Vector3 brakeForce = -forwardVelocity * brakeInput * brakeTorque;
+            rb.AddForce(brakeForce, ForceMode.Force);
+        }           
+    }
 
     private void ApplyUprightTorque(Vector3 rotation)
     {
@@ -139,8 +193,6 @@ public class MotoController : MonoBehaviour
             rb.AddForceAtPosition(totalForce, LevitationPoint.position);
 
             Debug.DrawRay(LevitationPoint.position, Vector3.down * currentHeight, Color.green);
-
-
         }
         else
         {
@@ -154,8 +206,7 @@ public class MotoController : MonoBehaviour
         float currentLeanAngle = Vector3.SignedAngle(transform.up, Vector3.up, transform.forward);
         float leanError = targetLeanAngle - currentLeanAngle;
         float angularLeanVelocity = Vector3.Dot(rb.angularVelocity, transform.forward);
-        float leanTorque = leanError * LeanStrenght - angularLeanVelocity * LeanDamping;
-              
+        float leanTorque = leanError * LeanStrenght - angularLeanVelocity * LeanDamping;             
 
             rb.AddTorque(transform.forward * leanTorque);        
     }
@@ -165,5 +216,34 @@ public class MotoController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(frontPoint.position, frontPoint.position - frontPoint.transform.up * groundCheckDistance);
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        EmitContactParticles(collision);
+        EmitProlongedContactParticles(collision);
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+        impactParticles.Stop();
+        prolongedImpactParticles.Stop();
+    }
+    private void EmitContactParticles(Collision collision)
+    {
+
+        if (impactParticles == null) return;
+        ContactPoint contact = collision.contacts[0];
+        impactParticles.transform.position = contact.point;
+        impactParticles.transform.rotation = Quaternion.LookRotation(contact.normal);
+
+        impactParticles.Play();
+    }
+    private void EmitProlongedContactParticles(Collision collision)
+    {
+        if (prolongedImpactParticles == null) return;
+        ContactPoint contact = collision.contacts[0];
+        prolongedImpactParticles.transform.position = contact.point;
+        prolongedImpactParticles.transform.rotation = Quaternion.LookRotation(contact.normal);
+
+        prolongedImpactParticles.Play();
     }
 }
