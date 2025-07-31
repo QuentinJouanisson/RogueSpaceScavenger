@@ -1,16 +1,17 @@
 using UnityEngine;
 
-public class CollectablesPickup : MonoBehaviour
+public class CollectablesObject : MonoBehaviour
 {
-    public string id = "pileOfJunk";
-    public string displayName = "Pile of Junk";
-    public int quantity = 1;
+    public string id = "pileOfJunk";   
+    
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            InventoryManager.Instance.AddItem(id, displayName, quantity);
+            InventoryData inventory = SaveSystem.LoadInventory();
+            inventory.AddItem(id, 1);
+            SaveSystem.SaveInventory(inventory);
             Destroy(gameObject);
         }
     }    

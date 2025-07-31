@@ -91,6 +91,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MaskInput:
+        m_Texture: {fileID: 2800000, guid: 3028ccbef2bd6934eb9ec9ee9295cc59, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -143,6 +147,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: a40edb2aca251bc44a959c1daea60e00, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_75a67c72b30c4a27adeb02462899bf3a_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 7c97f74046a625545bfaf53b3ebe88ab, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_7a2964edc45c4cc8ad9abfa15439a5bb_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 5d8e738c93283de42ad51c26df228a61, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -155,6 +163,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 7c97f74046a625545bfaf53b3ebe88ab, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_a35aabc6889f4fcdb16fe3bb62cb15de_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: a40edb2aca251bc44a959c1daea60e00, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_a51a47e23bf944c69bdca6d08cefc22f_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 9f7be7eae5a0c6345a4f6dc25f91f6b2, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -165,6 +177,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_b2bb9bc090dd4bc8ac5b315fc05ea4f8_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: d2a4100b18b429e428036fd066853b43, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_b3f934e849f94415bd079220c86bf84f_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 3028ccbef2bd6934eb9ec9ee9295cc59, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_c0a9377fb8734f30a96594e24a4a9c7e_Texture_1_Texture2D:

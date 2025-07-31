@@ -1,12 +1,13 @@
 using UnityEngine;
 using System.IO;
+using NUnit.Framework;
+using System.Collections.Generic;
 
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance;
-    private string savePath => Application.persistentDataPath + "/inventory.json";
 
-    public InventoryData inventory = new InventoryData();
+    public InventoryData currentInventory;
 
     private void Awake()
     {
@@ -21,33 +22,32 @@ public class InventoryManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public void AddItem(string id, string displayName, int quantity = 1)
+    public void AddItem(string id, int amount = 1)
     {
-        var existing = inventory.items.Find(i => i.id == id);
-        if (existing != null)
-            existing.quantity = quantity;
-        else
-            inventory.items.Add(new Collectables(id, displayName, quantity));
-        SaveInventory();
+       currentInventory.AddItem(id, amount);
+       SaveInventory();        
     }
 
+    //public static T Find<T>(this IList<T> list) 
+    //{
+    //    return list[0] ;
+    //}
     public void SaveInventory()
     {
-        var json = JsonUtility.ToJson(inventory, true);
-        File.WriteAllText(savePath, json);
+        SaveSystem.SaveInventory(currentInventory);        
     }
 
     public void LoadInventory()
     {
-        if (File.Exists(savePath))
-        {
-            var json = File.ReadAllText(savePath);
-            inventory = JsonUtility.FromJson<InventoryData>(json);
-        }
+        currentInventory  = SaveSystem.LoadInventory();
     }
     public void ClearInventory()
     {
-        inventory = new InventoryData();
+        currentInventory = new InventoryData();
         SaveInventory();
+    }    
+    public int GetCount(string id)
+    {
+        return currentInventory.GetCount(id);
     }    
 }

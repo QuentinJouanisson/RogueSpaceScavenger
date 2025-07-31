@@ -57,8 +57,8 @@ public class MotoController : MonoBehaviour
 
     private Rigidbody rb;    
     private bool grounded;
-    private bool canJump;
-    private bool isJumping;
+    
+    
     
 
     void Awake()
@@ -73,8 +73,7 @@ public class MotoController : MonoBehaviour
         controls.Vehicle.Jump.performed += ctx => jumpInput = ctx.ReadValue<float>();
         controls.Vehicle.Jump.canceled += _ =>
         {
-            jumpInput = 0f;
-            isJumping = false;
+            jumpInput = 0f;            
         };
 
         controls.Vehicle.Brake.performed += ctx => brakeInput = ctx.ReadValue<float>();
@@ -110,7 +109,8 @@ public class MotoController : MonoBehaviour
         }
         else
         {
-            ApplyBrakeForce();
+            //ApplyBrakeForce();
+            SecondBrake();
         }
 
         ApplyLeanTorque();
@@ -163,6 +163,10 @@ public class MotoController : MonoBehaviour
             Vector3 brakeForce = -forwardVelocity * brakeInput * brakeTorque;
             rb.AddForce(brakeForce, ForceMode.Force);
         }           
+    }
+    private void SecondBrake()
+    {
+        rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, Time.fixedDeltaTime * 10);
     }
 
     private void ApplyUprightTorque(Vector3 rotation)
