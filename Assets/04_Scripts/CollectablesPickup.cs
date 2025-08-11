@@ -2,16 +2,22 @@ using UnityEngine;
 
 public class CollectablesObject : MonoBehaviour
 {
-    public string id = "pileOfJunk";   
+    public string id = "Junk";   
     
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            InventoryData inventory = SaveSystem.LoadInventory();
-            inventory.AddItem(id, 1);
-            SaveSystem.SaveInventory(inventory);
+            if(InventoryManager.Instance != null)
+            {
+                InventoryManager.Instance.AddItem(id, 1);
+            }
+            else
+            {
+                Debug.LogError("InventoryManager instance not found");
+            }               
+            
             Destroy(gameObject);
         }
     }    

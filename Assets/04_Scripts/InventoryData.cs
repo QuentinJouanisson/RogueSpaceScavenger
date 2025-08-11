@@ -3,7 +3,7 @@ using System.Collections.Generic;
 [System.Serializable]
 public class InventoryData
 {
-    public List<CollectablesData> collectedItems = new List<CollectablesData>();
+    public List<CollectableItem> collectedItems = new List<CollectableItem>();
     public void AddItem(string id, int amount = 1)
     {
         foreach(var item in collectedItems)
@@ -14,7 +14,7 @@ public class InventoryData
                 return;
             }
         }
-        collectedItems.Add(new CollectablesData(id, amount));
+        collectedItems.Add(new CollectableItem(id, amount));
     }
 
     public int GetCount(string id)
@@ -25,6 +25,5 @@ public class InventoryData
                 return item.quantity;
         }
         return 0;
-    }
-    
+    }    
 }

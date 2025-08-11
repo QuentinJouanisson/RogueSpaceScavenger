@@ -103,6 +103,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 474bab23026fa064ebd381bc7a34270c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: pileOfJunk
-  displayName: Pile of Junk
-  quantity: 1
+  id: Junk

@@ -4,13 +4,17 @@ using UnityEngine.SceneManagement;
 
 public class GameBootstrap : MonoBehaviour
 {
+    private static bool hasLoadedGameScene = false;
+
 
     void Start()
     {
-        SceneManager.LoadScene("PersistentScene", LoadSceneMode.Additive);
-
-        SceneManager.LoadScene("DemoLevelScene",LoadSceneMode.Additive);  
-        
+        if (!hasLoadedGameScene)
+        {
+            SceneManager.LoadScene("DemoLevelScene", LoadSceneMode.Additive);
+            SceneManager.LoadScene("PersistantScene", LoadSceneMode.Additive);
+            hasLoadedGameScene = true;
+        }       
     }
 
 

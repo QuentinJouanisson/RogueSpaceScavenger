@@ -1,10 +1,11 @@
 [System.Serializable]
-public class CollectablesData
+public class CollectableItem
 {
     public string id;
     public int quantity;
+    public CollectableItem() { }
 
-    public CollectablesData(string id, int quantity = 1)
+    public CollectableItem(string id, int quantity = 1)
     {
         this.id = id;        
         this.quantity = quantity;

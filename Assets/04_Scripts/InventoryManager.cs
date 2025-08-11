@@ -16,6 +16,8 @@ public class InventoryManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
             LoadInventory();
+            if(currentInventory == null)
+                currentInventory = new InventoryData();
         }
         else
         {
@@ -26,12 +28,7 @@ public class InventoryManager : MonoBehaviour
     {
        currentInventory.AddItem(id, amount);
        SaveInventory();        
-    }
-
-    //public static T Find<T>(this IList<T> list) 
-    //{
-    //    return list[0] ;
-    //}
+    }     
     public void SaveInventory()
     {
         SaveSystem.SaveInventory(currentInventory);        
@@ -39,7 +36,7 @@ public class InventoryManager : MonoBehaviour
 
     public void LoadInventory()
     {
-        currentInventory  = SaveSystem.LoadInventory();
+        currentInventory  = SaveSystem.LoadInventory() ?? new InventoryData();
     }
     public void ClearInventory()
     {

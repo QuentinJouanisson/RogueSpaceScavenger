@@ -13,6 +13,7 @@ public class GameTimerScript : MonoBehaviour
 
     void Start()
     {
+        SaveSystem.ClearSave();
         currentTime = gameDuration;
         UpdateTimerUI();
         
@@ -45,6 +46,16 @@ public class GameTimerScript : MonoBehaviour
 
     void EndGame()
     {
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.SaveInventory();
+
+        }
+        else
+        {
+            Debug.LogWarning("inventoryManagerIntrouvable");
+        }
+
         SceneManager.LoadScene("WorkshopScene");
     }
 

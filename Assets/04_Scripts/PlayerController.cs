@@ -22,7 +22,7 @@ public class MotoController : MonoBehaviour
     [Header("Movement")]
     public float forwardForce = 3000f;
     public float turnTorque = 1000f;
-    public float brakeTorque = 50f;
+    public float brakeTorque = 1f;
 
     [Header("HoverThruster")]
     public float hoverThrustPower = 50f;

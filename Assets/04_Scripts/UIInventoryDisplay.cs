@@ -8,11 +8,14 @@ public class UIInventoryDisplay : MonoBehaviour
     public TextMeshProUGUI itemCountText;
 
     [Header("ItemToDisplay")]
-    public string itemId = "pileOfJunk";
+    public string itemId = "Junk";
 
     void Start()
     {
+        InventoryManager.Instance.LoadInventory();
+        
         UpdateDisplay();
+
     }
 
 public void UpdateDisplay()
@@ -28,8 +31,12 @@ public void UpdateDisplay()
             itemCountText.text = "InventaireIntrouvable";
         }
     }
+
+
     void Update()
     {
         
     }
+
+    
 }

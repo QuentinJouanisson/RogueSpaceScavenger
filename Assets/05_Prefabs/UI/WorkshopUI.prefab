@@ -259,7 +259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemCountText: {fileID: 2748122785769156802}
-  itemId: pileOfJunk
+  itemId: Junk
 --- !u!1 &6673774298715743494
 GameObject:
   m_ObjectHideFlags: 0
