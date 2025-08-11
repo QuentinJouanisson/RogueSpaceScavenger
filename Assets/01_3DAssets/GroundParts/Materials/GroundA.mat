@@ -71,6 +71,50 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _InputColor1:
+        m_Texture: {fileID: 2800000, guid: 7c97f74046a625545bfaf53b3ebe88ab, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _InputColor2:
+        m_Texture: {fileID: 2800000, guid: 890b2fbb3ebd101439302c39461a1638, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _InputColor3:
+        m_Texture: {fileID: 2800000, guid: 6978bb671f939b6478bede5010d112e5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _InputColor4:
+        m_Texture: {fileID: 2800000, guid: 243908446f7154840891dc35c133b07c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _InputColor5:
+        m_Texture: {fileID: 2800000, guid: 1c8b6ab025a97f048af8f54593db2fe8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _InputMetSmooth2:
+        m_Texture: {fileID: 2800000, guid: d2a4100b18b429e428036fd066853b43, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _InputMetSmooth3:
+        m_Texture: {fileID: 2800000, guid: 5d8e738c93283de42ad51c26df228a61, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _InputMetallicSmooth1:
+        m_Texture: {fileID: 2800000, guid: a40edb2aca251bc44a959c1daea60e00, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _InputNormals1:
+        m_Texture: {fileID: 2800000, guid: 72b2c916e2053f04898c71518a280037, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _InputNormals2:
+        m_Texture: {fileID: 2800000, guid: 0a9e1dd3c7df33743895fb3c9212214f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _InputNormals3:
+        m_Texture: {fileID: 2800000, guid: 397c360a698311f478bf255a4c767dbc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -95,6 +139,22 @@ Material:
         m_Texture: {fileID: 2800000, guid: 3028ccbef2bd6934eb9ec9ee9295cc59, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MaskInput1:
+        m_Texture: {fileID: 2800000, guid: 3028ccbef2bd6934eb9ec9ee9295cc59, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskInput2:
+        m_Texture: {fileID: 2800000, guid: 1eaff840f5b0c6d41adf1a2818340adf, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskInput3:
+        m_Texture: {fileID: 2800000, guid: 9f7be7eae5a0c6345a4f6dc25f91f6b2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskInput4:
+        m_Texture: {fileID: 2800000, guid: c94a2d3408e959e46b77105300ff15ce, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -113,6 +173,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _Normal3:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalFromTexture_ed5988d6459946878f276f0e26053c4a_Texture_0_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 397c360a698311f478bf255a4c767dbc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -163,6 +227,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 7c97f74046a625545bfaf53b3ebe88ab, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_9e29c06beccd424f84c11b062a3dd3c0_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: f8cc4125bfbea9f4eaba403fd75ef70d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_a35aabc6889f4fcdb16fe3bb62cb15de_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: a40edb2aca251bc44a959c1daea60e00, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -199,6 +267,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 1c8b6ab025a97f048af8f54593db2fe8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_d964305cda7a419a9147f525fcd58f97_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 72b2c916e2053f04898c71518a280037, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_db04d3fb2b764f9d85428434e8be7688_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 243908446f7154840891dc35c133b07c, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -232,6 +304,70 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TerrainHolesTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_17d78dc4e6df4f06bed1289f006286f1_InputColor_140620300_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_17d78dc4e6df4f06bed1289f006286f1_InputMetallicSmooth_177134795_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_17d78dc4e6df4f06bed1289f006286f1_InputNormals_1724303510_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_330d9800909e440e9d581deb70c2d2be_InputColor_140620300_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_330d9800909e440e9d581deb70c2d2be_InputMetallicSmooth_177134795_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_330d9800909e440e9d581deb70c2d2be_InputNormals_1724303510_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_330d9800909e440e9d581deb70c2d2be_maskInpu_84903874_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 3028ccbef2bd6934eb9ec9ee9295cc59, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_c1cc43b411664cf6b0eaa92cc12dc60d_InputColor_140620300_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_c1cc43b411664cf6b0eaa92cc12dc60d_InputMetallicSmooth_177134795_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_c1cc43b411664cf6b0eaa92cc12dc60d_InputNormals_1724303510_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_c1cc43b411664cf6b0eaa92cc12dc60d_maskInpu_84903874_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 3028ccbef2bd6934eb9ec9ee9295cc59, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_da5ec067678f4031a5044f66cc2dc014_InputMetallicSmooth_177134795_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_da5ec067678f4031a5044f66cc2dc014_InputNormals_1724303510_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_da5ec067678f4031a5044f66cc2dc014_maskInpu_84903874_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 3028ccbef2bd6934eb9ec9ee9295cc59, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_ef9f20bcafe44a8e9569a73182a18281_InputMetallicSmooth_177134795_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainMaterialSubGraph1_ef9f20bcafe44a8e9569a73182a18281_InputNormals_1724303510_Texture2D:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
