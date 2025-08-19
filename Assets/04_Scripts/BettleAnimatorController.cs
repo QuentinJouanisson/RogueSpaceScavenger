@@ -7,19 +7,37 @@ namespace Ennemy
 
     public class BettleAnimatorController : MonoBehaviour
     {
+        [Header("Ranges")]
         public float detectionRange = 10f;
+        public float attackRange = 2f;
+
+        [Header("Movement")]
         public float speed = 2f;
-        public string playerTag = "Player";
         public float rotationSpeed = 1f;
+
+        [Header("Settings")]
+        public string playerTag = "Player";
+
 
         private Animator animator;
         private Transform player;
         private bool hasEnteredAttack = false;
+        private PlayerHealth playerHealth;
 
        
 
         void Start()
         {
+            GameObject playerHealthInstance = GameObject.FindGameObjectWithTag("Player");
+            if(playerHealthInstance != null)
+            {
+                playerHealth = playerHealthInstance.GetComponent<PlayerHealth>();
+            }
+            if(playerHealthInstance == null)
+            {
+                Debug.LogError("playerHealthNotFound");
+            }
+            
             animator = GetComponent<Animator>();
             player = GameObject.FindGameObjectWithTag(playerTag)?.transform;            
 
@@ -44,11 +62,16 @@ namespace Ennemy
 
         private void Update()
         {
+             
             
             if (player == null) return;
+
+            bool IsPlayerAlive = playerHealth.currentHealth > 0f;
+            animator.SetBool("IsPlayerAlive", true);
+
             float distance = Vector3.Distance(transform.position, player.position);
 
-            if ( distance <= detectionRange)
+            if ( distance <= detectionRange && IsPlayerAlive)
             {
                 if (!hasEnteredAttack)
                 {
@@ -56,11 +79,32 @@ namespace Ennemy
                     animator.SetBool("IsAttacking", true);
                     hasEnteredAttack = true;
                 }
-                Attack();                
+                Attack();
+                
+                if(distance < attackRange)
+                {
+                    if (!hasEnteredAttack)
+                    {
+                        animator.SetTrigger("EnterAttack");
+                        hasEnteredAttack= true;
+                        
+                    }
+                    animator.SetBool("IsAttacking", true );
+                    animator.SetBool("PlayerInRange", true ) ;
+                    
+
+                }
+                else
+                {
+                    animator.SetBool("IsAttacking", false );
+                    animator.SetBool("PlayerInRange", false ) ;
+                    hasEnteredAttack = false;
+                }
             }
             else
             {
-                    animator.SetBool("IsAttacking", false);
+                    animator.SetBool("IsAttacking",false);
+                    animator.SetBool("PlayerInRange", false);
                     hasEnteredAttack = false;
                     
              

@@ -8,9 +8,9 @@ public class MotoController : MonoBehaviour
 {
     private PlayerControls controls;
 
-    private ParticleSystem impactParticles;
-    private ParticleSystem prolongedImpactParticles;
-    private ParticleSystem jumpParticles;
+    public ParticleSystem impactParticles;
+    public ParticleSystem prolongedImpactParticles;
+    public ParticleSystem jumpParticles;
     public float throttleInput;
     public float brakeInput;
     public float turnInput;
@@ -57,7 +57,7 @@ public class MotoController : MonoBehaviour
 
     private Rigidbody rb;    
     private bool grounded;
-    
+    [SerializeField] private GameObject motorpart;
     
     
 
@@ -108,8 +108,7 @@ public class MotoController : MonoBehaviour
             rb.AddForce(transform.forward * throttleInput * forwardForce * Time.fixedDeltaTime);
         }
         else
-        {
-            //ApplyBrakeForce();
+        {            
             SecondBrake();
         }
 
@@ -154,19 +153,25 @@ public class MotoController : MonoBehaviour
         bool rearGrounded = Physics.Raycast(rearPoint.position, Vector3.down, groundCheckDistance, groundLayer);
         return frontGrounded || rearGrounded;
     }    
-    private void ApplyBrakeForce()
+    public void OnDeath()
     {
-       float forwardSpeed = Vector3.Dot(rb.linearVelocity, transform.forward);
-        if (forwardSpeed > 0.5f )
-        {
-            Vector3 forwardVelocity = transform.forward * forwardSpeed;
-            Vector3 brakeForce = -forwardVelocity * brakeInput * brakeTorque;
-            rb.AddForce(brakeForce, ForceMode.Force);
-        }           
+
+        Explosion();
+        LeanStrenght = 0f;
+        LeanDamping = 0f;
+        brakeTorque = 0f;
+        DesiredHeight = 0f;
+        controls.Vehicle.Disable();
+        LevitationForce = 0f;
+        uprightTorque = 0f;
+
+
+        Debug.Log("ControlDisabled");
     }
+
     private void SecondBrake()
     {
-        rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, Time.fixedDeltaTime * 10);
+        rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, Time.fixedDeltaTime * 1);
     }
 
     private void ApplyUprightTorque(Vector3 rotation)
@@ -250,4 +255,20 @@ public class MotoController : MonoBehaviour
 
         prolongedImpactParticles.Play();
     }
+    private void Explosion()
+    {
+        var parts = motorpart.GetComponentsInChildren<MeshRenderer>();
+
+        for (int i = 0; i< parts.Length; i++)
+        {
+            if (parts[i].GetComponent<Rigidbody>())
+            {
+                continue;
+            }
+            parts[i].gameObject.AddComponent<SphereCollider>();
+            parts[i].gameObject.AddComponent<Rigidbody>();
+            
+        }
+    }
+    
 }

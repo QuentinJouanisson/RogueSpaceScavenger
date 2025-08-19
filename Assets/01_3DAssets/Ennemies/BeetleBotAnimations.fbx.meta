@@ -63,7 +63,7 @@ ModelImporter:
       name: Armature|BettleAttack
       takeName: Armature|BettleAttack
       internalID: 2505744562214987945
-      firstFrame: 37.75
+      firstFrame: 38
       lastFrame: 291.34
       wrapMode: 0
       orientationOffsetY: 0
@@ -146,7 +146,7 @@ ModelImporter:
       maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
-    isReadable: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1

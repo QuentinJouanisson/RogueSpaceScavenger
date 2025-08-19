@@ -7,7 +7,10 @@ public class ChangeToGame : MonoBehaviour
 
     public void LoadGameScene()
     {
+        SceneManager.LoadScene("PersistantScene");
         SceneManager.LoadScene("DemolevelScene");
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("DemolevelScene"));
+
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
