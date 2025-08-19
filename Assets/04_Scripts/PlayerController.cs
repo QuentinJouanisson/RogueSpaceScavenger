@@ -8,13 +8,13 @@ public class MotoController : MonoBehaviour
 {
     private PlayerControls controls;
 
-    public ParticleSystem impactParticles;
-    public ParticleSystem prolongedImpactParticles;
-    public ParticleSystem jumpParticles;
-    private float throttleInput;
-    private float brakeInput;
-    private float turnInput;
-    private float jumpInput;
+    private ParticleSystem impactParticles;
+    private ParticleSystem prolongedImpactParticles;
+    private ParticleSystem jumpParticles;
+    public float throttleInput;
+    public float brakeInput;
+    public float turnInput;
+    public float jumpInput;
 
     [Header("UI")]
     public Slider HoverSlider;
