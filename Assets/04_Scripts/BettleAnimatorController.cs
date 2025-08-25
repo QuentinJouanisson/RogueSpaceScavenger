@@ -18,11 +18,18 @@ namespace Ennemy
         [Header("Settings")]
         public string playerTag = "Player";
 
+        [Header("Death")]
+        public float deathDelay = 2f;
+        public ParticleSystem deathParticles;
+        public GameObject damageZone;
+
 
         private Animator animator;
         private Transform player;
         private bool hasEnteredAttack = false;
         private PlayerHealth playerHealth;
+        private bool isDead = false;
+        private Collider[] colliders;
 
        
 
@@ -45,11 +52,13 @@ namespace Ennemy
             {
                 animator.Play("Idle");
             }
+            colliders = GetComponentsInChildren<Collider>(true);
             
         }
         private void Attack()
         {
-            
+            if (isDead || player == null) return;         
+
             Vector3 direction = (player.position - transform.position).normalized;            
             if (direction != Vector3.zero)
             {
@@ -62,11 +71,11 @@ namespace Ennemy
 
         private void Update()
         {
-             
+            if(isDead || player == null) return; 
             
             if (player == null) return;
 
-            bool IsPlayerAlive = playerHealth.currentHealth > 0f;
+            bool IsPlayerAlive = (playerHealth != null && playerHealth.currentHealth > 0f);
             animator.SetBool("IsPlayerAlive", true);
 
             float distance = Vector3.Distance(transform.position, player.position);
@@ -110,6 +119,12 @@ namespace Ennemy
              
             }
            
+        }
+
+
+        public void OnPlayerCollision(Collider other)
+        {
+            Destroy(gameObject);
         }
     }
 }
