@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 namespace Ennemy
 {
@@ -35,6 +36,7 @@ namespace Ennemy
 
         void Start()
         {
+            deathParticles.Stop();
             GameObject playerHealthInstance = GameObject.FindGameObjectWithTag("Player");
             if(playerHealthInstance != null)
             {
@@ -124,7 +126,43 @@ namespace Ennemy
 
         public void OnPlayerCollision(Collider other)
         {
-            Destroy(gameObject);
+            if(isDead) return;
+            Die();           
+        }
+
+        private void Die()
+        {
+            isDead = true;
+
+            if (animator)
+            {
+                animator.SetBool("IsAttacking", false);
+                animator.SetBool("PlayerInRange", false);
+                animator.SetBool("IsPlayerAlive", false);              
+            }
+            if (damageZone) damageZone.SetActive(false);
+            if ( colliders != null)
+            {
+                for(int i = 0; i < colliders.Length; i++)
+                    colliders[i].enabled = false;
+            }
+            if (deathParticles != null)
+            {
+                deathParticles.transform.SetParent(null);
+                deathParticles.Play();
+
+                var main = deathParticles.main;
+                float psLife = main.duration;
+                if (main.startLifetime.mode == ParticleSystemCurveMode.TwoConstants)
+                    psLife += main.startLifetime.constantMax;
+                else 
+                    psLife += main.startLifetime.constant;
+
+                Destroy(deathParticles.gameObject, psLife);
+
+            }
+            Destroy(gameObject, deathDelay);
+
         }
     }
 }

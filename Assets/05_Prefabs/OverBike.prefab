@@ -107,7 +107,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   LevitationForce: 60
-  DesiredHeight: 1.5
+  DesiredHeight: 1.6
   LevitationDamping: 0.05
   LevitationRayLength: 15
   gavitationPower: 9.8
@@ -128,6 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 0
+  playerHealthSlider: {fileID: 0}
 --- !u!64 &350533094947265883
 MeshCollider:
   m_ObjectHideFlags: 0

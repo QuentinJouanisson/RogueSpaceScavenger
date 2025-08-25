@@ -333,6 +333,9 @@ MonoBehaviour:
   speed: 6
   rotationSpeed: 1
   playerTag: Player
+  deathDelay: 0
+  deathParticles: {fileID: 1812527339401415559}
+  damageZone: {fileID: 2645367834885018203}
 --- !u!195 &3585027554253285359
 NavMeshAgent:
   m_ObjectHideFlags: 0
