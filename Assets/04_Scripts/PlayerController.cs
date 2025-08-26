@@ -155,8 +155,12 @@ public class MotoController : MonoBehaviour
     }    
     public void OnDeath()
     {
-
-        Explosion();
+        GameManager.instance.TriggerGameOver();
+        DisablePlayerControls();
+        Explosion();        
+    }
+    public void DisablePlayerControls()
+    {
         LeanStrenght = 0f;
         LeanDamping = 0f;
         brakeTorque = 0f;
@@ -164,9 +168,8 @@ public class MotoController : MonoBehaviour
         controls.Vehicle.Disable();
         LevitationForce = 0f;
         uprightTorque = 0f;
-
-
         Debug.Log("ControlDisabled");
+
     }
 
     private void SecondBrake()
@@ -235,6 +238,17 @@ public class MotoController : MonoBehaviour
     {
         impactParticles.Stop();
         prolongedImpactParticles.Stop();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Finish"))
+        {
+            Debug.Log("Player Fell GameOverTriggered");
+            DisablePlayerControls();
+            GameManager.instance.TriggerGameOver();
+
+        }
     }
     private void EmitContactParticles(Collision collision)
     {
