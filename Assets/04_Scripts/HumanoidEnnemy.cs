@@ -26,11 +26,9 @@ public class HumanoidEnnemy : MonoBehaviour
 
     [Header("Attack Settings")]
     public int contactDamage = 10;
+    public int prollongedContactDamage = 2;
     public float attackCooldown = 1f;
-    
-
-    [Header("Head collider")]
-    public Collider headCollider;
+       
 
     private Transform player;
     private int currentPatrolIndex = 0;    
@@ -43,6 +41,7 @@ public class HumanoidEnnemy : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        float basePatrolSpeed = patrolSpeed;
         GameObject playerObj = GameObject.FindGameObjectWithTag(playerTag);
         if(playerObj != null)
         {
@@ -52,12 +51,16 @@ public class HumanoidEnnemy : MonoBehaviour
         {
             Debug.LogError("Player Not Found");
         }
+        
 
         animator = GetComponent<Animator>();
         if(animator == null)
         {
             Debug.LogWarning("Animator Not Found");
         }
+
+        animator.SetBool("IsDead", false);
+
         if(patrolPoints.Length == 0)
         {
             Debug.LogWarning("no patrol points assigned");
@@ -67,12 +70,10 @@ public class HumanoidEnnemy : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        
-
+    {        
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        float basePatrolSpeed = patrolSpeed;
+        
 
         if (player == null)
         {
@@ -86,7 +87,7 @@ public class HumanoidEnnemy : MonoBehaviour
         {
             
             float runSpeed = patrolSpeed * chaseSpeedMultiplier;
-            MoveTowards(player.position, runSpeed);
+            MoveTowards(player.position, runSpeed);            
             animator.SetBool("IsAttacking", true);
             animator.SetBool("IsIdlying", false);
             animator.SetBool("IsPatroling", false );            
@@ -97,9 +98,9 @@ public class HumanoidEnnemy : MonoBehaviour
         {
             
             animator.SetBool("IsAttacking", false );
-            animator.SetBool("IsPatroling", true);
+            animator.SetBool("IsPatroling", true);            
             animator.SetTrigger("Patroling");
-            Patrol(basePatrolSpeed);
+            Patrol(patrolSpeed);
         }
 
     }
@@ -141,41 +142,46 @@ public class HumanoidEnnemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag(playerTag))
         {
+            
+         PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
+
+            if (playerHealth != null)
+                {
+                    playerHealth.TakeDamage(contactDamage);                
+                }
+                
+        }
+
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag(playerTag))
+        {
             float timeSincelastAttack = Time.time - lastAttackTime;
-            if(timeSincelastAttack >= attackCooldown)
+            if (timeSincelastAttack >= attackCooldown)
             {
                 PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
-                if(playerHealth != null)
+                if (playerHealth != null)
                 {
-                    playerHealth.TakeDamage(contactDamage);
+                    playerHealth.TakeDamage(prollongedContactDamage);
                     lastAttackTime = Time.time;
                 }
             }
         }
-    }
-    private void OnCollisionStay(Collision collision)
+    }    
+    public void EnnemyDie()
     {
-        
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other == headCollider && other.CompareTag(playerTag))
-        {
-            EnnemyDie();
-        }
-    }
-    void EnnemyDie()
-    {
+        Debug.Log("HEnnemyDied");
+
+        animator.SetBool("IsDead", true);
+        animator.SetTrigger("Dying");
+
+        patrolSpeed = 0;
         Collider[] colliders = GetComponentsInChildren<Collider>();
         for(int i = 0; i < colliders.Length; i++)
         {
             colliders[i].enabled =false;
-        }
-
-        if(animator != null)
-        {
-            animator.enabled = false;
-        }
+        }        
 
         Destroy(gameObject, 2f);
     }
