@@ -13,12 +13,14 @@ public class HumanoidEnnemy : MonoBehaviour
     public Transform[] patrolPoints;
     public float patrolSpeed = 2f;
     public float rotationSpeed = 5f;
+    public float controlPointZone = 0.5f;
 
 
     [Header("Detection Settings")]
     public string playerTag = "Player";
     public float detectionRange = 10f;
     public float attackRange = 1.5f;
+    public float chaseSpeedMultiplier = 4f;
 
 
 
@@ -31,8 +33,7 @@ public class HumanoidEnnemy : MonoBehaviour
     public Collider headCollider;
 
     private Transform player;
-    private int currentPatrolIndex = 0;
-    private bool playerDetected = false;
+    private int currentPatrolIndex = 0;    
     private float lastAttackTime = 0f;
     private Animator animator;
    
@@ -43,7 +44,7 @@ public class HumanoidEnnemy : MonoBehaviour
     void Start()
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag(playerTag);
-        if(playerObj = null)
+        if(playerObj != null)
         {
             player = playerObj.transform;
         }
@@ -67,32 +68,51 @@ public class HumanoidEnnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player == null) return;
+        
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
+        float basePatrolSpeed = patrolSpeed;
+
+        if (player == null)
+        {
+            Debug.LogWarning("Player not found");            
+            animator.SetBool("IsIdlying", true);
+            animator.SetTrigger("Idlying");
+        }      
+
+
         if (distanceToPlayer <= detectionRange)
         {
-            playerDetected = true;
-            MoveTowards(player.position);
+            
+            float runSpeed = patrolSpeed * chaseSpeedMultiplier;
+            MoveTowards(player.position, runSpeed);
+            animator.SetBool("IsAttacking", true);
+            animator.SetBool("IsIdlying", false);
+            animator.SetBool("IsPatroling", false );            
+            animator.SetTrigger("Attacking");
+            
         }
         else
         {
-            playerDetected = false;
-            Patrol();
+            
+            animator.SetBool("IsAttacking", false );
+            animator.SetBool("IsPatroling", true);
+            animator.SetTrigger("Patroling");
+            Patrol(basePatrolSpeed);
         }
 
     }
 
-    void Patrol()
+    void Patrol(float patrolSpeed)
     {
         if (patrolPoints.Length == 0) return;
 
         Transform targetPoint = patrolPoints[currentPatrolIndex];
-        MoveTowards(targetPoint.position);
+        MoveTowards(targetPoint.position, patrolSpeed);
 
         float distance = Vector3.Distance(transform.position, targetPoint.position);
-        if(distance < 0.5f)
+        if(distance < controlPointZone)
         {
             currentPatrolIndex++;
             if(currentPatrolIndex >= patrolPoints.Length)
@@ -100,8 +120,9 @@ public class HumanoidEnnemy : MonoBehaviour
         }        
     }
 
-    void MoveTowards(Vector3 target)
+    void MoveTowards(Vector3 target, float patrolSpeed)
     {
+        float speed = patrolSpeed;
         Vector3 direction = (target - transform.position).normalized;
         direction.y = 0f;
 
@@ -111,12 +132,9 @@ public class HumanoidEnnemy : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
 
-        transform.position += direction * patrolSpeed * Time.deltaTime;
+        transform.position += direction * speed * Time.deltaTime;
 
-        if(animator != null)
-        {
-            animator.SetBool("IsMoving", true);
-        }
+        
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -134,6 +152,10 @@ public class HumanoidEnnemy : MonoBehaviour
                 }
             }
         }
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+        
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -157,4 +179,5 @@ public class HumanoidEnnemy : MonoBehaviour
 
         Destroy(gameObject, 2f);
     }
+    
 }
