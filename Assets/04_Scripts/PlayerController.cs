@@ -1,4 +1,5 @@
 using Unity.Cinemachine;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -271,18 +272,48 @@ public class MotoController : MonoBehaviour
     }
     private void Explosion()
     {
-        var parts = motorpart.GetComponentsInChildren<MeshRenderer>();
-
-        for (int i = 0; i< parts.Length; i++)
+        var meshParts = motorpart.GetComponentsInChildren<MeshRenderer>();
+        var skinnedParts = motorpart.GetComponentsInChildren<SkinnedMeshRenderer>();
+        foreach (var part in meshParts)
         {
-            if (parts[i].GetComponent<Rigidbody>())
-            {
-                continue;
-            }
-            parts[i].gameObject.AddComponent<SphereCollider>();
-            parts[i].gameObject.AddComponent<Rigidbody>();
-            
+            AddPhysicsToParts(part.gameObject);
+
         }
+
+        foreach (var skinned in skinnedParts)
+        {
+            if (skinned == null || skinned.GetComponent<Rigidbody>() != null)
+                continue;
+
+            Mesh bakedMesh = new Mesh();
+            skinned.BakeMesh(bakedMesh);
+
+            GameObject bakedPart = new GameObject(skinned.name + "_Baked");
+            bakedPart.transform.SetPositionAndRotation(skinned.transform.position, skinned.transform.rotation);
+            bakedPart.transform.localScale = skinned.transform.lossyScale;
+            bakedPart.AddComponent<MeshFilter>();
+            bakedPart.AddComponent<MeshRenderer>();
+
+            var mf = bakedPart.GetComponent<MeshFilter>();
+            mf.mesh = bakedMesh;
+
+            var mr = bakedPart.GetComponent<MeshRenderer>();
+            mr.materials = skinned.materials;
+
+            bakedPart.AddComponent<Rigidbody>();
+            bakedPart.AddComponent<SphereCollider>();
+
+            skinned.enabled = false;
+            
+            
+        }         
     }
-    
+
+    private void AddPhysicsToParts(GameObject go)
+    {
+        if (go.GetComponent<Rigidbody>() != null) return;
+
+        go.AddComponent<SphereCollider>();
+        go.AddComponent<Rigidbody>();
+    }    
 }
