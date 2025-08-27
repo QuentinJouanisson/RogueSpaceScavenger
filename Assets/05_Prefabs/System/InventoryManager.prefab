@@ -48,3 +48,7 @@ MonoBehaviour:
     collectedItems:
     - id: Junk
       quantity: 0
+    - id: LargeJunk
+      quantity: 0
+    - id: PurePlastic
+      quantity: 0

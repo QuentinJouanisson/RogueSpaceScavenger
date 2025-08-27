@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class CollectablesObject : MonoBehaviour
 {
+    public AudioClip pickupSound;
+    public float pickupSoundVolume;
+
     public string id = "Junk";   
     
 
@@ -9,6 +12,8 @@ public class CollectablesObject : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            AudioSource.PlayClipAtPoint(pickupSound, transform.position, pickupSoundVolume);
+
             if(InventoryManager.Instance != null)
             {
                 InventoryManager.Instance.AddItem(id, 1);

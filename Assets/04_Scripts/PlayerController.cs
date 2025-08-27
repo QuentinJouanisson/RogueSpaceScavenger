@@ -1,7 +1,7 @@
 using Unity.Cinemachine;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -273,40 +273,41 @@ public class MotoController : MonoBehaviour
     private void Explosion()
     {
         var meshParts = motorpart.GetComponentsInChildren<MeshRenderer>();
-        var skinnedParts = motorpart.GetComponentsInChildren<SkinnedMeshRenderer>();
-        foreach (var part in meshParts)
+        foreach(var part in meshParts)
         {
+            if (part == null) continue;
             AddPhysicsToParts(part.gameObject);
-
         }
 
+        var skinnedParts = motorpart.GetComponentsInChildren<SkinnedMeshRenderer>();
         foreach (var skinned in skinnedParts)
         {
-            if (skinned == null || skinned.GetComponent<Rigidbody>() != null)
-                continue;
+            if(skinned == null|| skinned.GetComponent<Rigidbody>() != null) continue;
+
+            if (skinned.gameObject.GetComponent<AlreadyBaked>() != null) continue;
 
             Mesh bakedMesh = new Mesh();
             skinned.BakeMesh(bakedMesh);
 
             GameObject bakedPart = new GameObject(skinned.name + "_Baked");
-            bakedPart.transform.SetPositionAndRotation(skinned.transform.position, skinned.transform.rotation);
-            bakedPart.transform.localScale = skinned.transform.lossyScale;
-            bakedPart.AddComponent<MeshFilter>();
-            bakedPart.AddComponent<MeshRenderer>();
+            bakedPart.transform.position = skinned.transform.position;
+            bakedPart.transform.rotation = skinned.transform.rotation;
+            bakedPart.transform.localScale = Vector3.one;
 
-            var mf = bakedPart.GetComponent<MeshFilter>();
+            MeshFilter mf = bakedPart.AddComponent<MeshFilter>();
             mf.mesh = bakedMesh;
 
-            var mr = bakedPart.GetComponent<MeshRenderer>();
+            MeshRenderer mr = bakedPart.AddComponent<MeshRenderer>();
             mr.materials = skinned.materials;
 
             bakedPart.AddComponent<Rigidbody>();
             bakedPart.AddComponent<SphereCollider>();
 
             skinned.enabled = false;
-            
-            
-        }         
+            skinned.gameObject.AddComponent<AlreadyBaked>();
+
+        }
+        
     }
 
     private void AddPhysicsToParts(GameObject go)
@@ -316,4 +317,5 @@ public class MotoController : MonoBehaviour
         go.AddComponent<SphereCollider>();
         go.AddComponent<Rigidbody>();
     }    
+    public class AlreadyBaked : MonoBehaviour { }
 }
