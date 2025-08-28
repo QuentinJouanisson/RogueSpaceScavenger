@@ -24,7 +24,7 @@ public class InventoryManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public void AddItem(string id, int amount = 1)
+    public void AddItem(string id, int amount)
     {
        currentInventory.AddItem(id, amount);
        SaveInventory();        

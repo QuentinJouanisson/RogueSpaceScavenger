@@ -9,7 +9,7 @@ public class ChangeToGame : MonoBehaviour
     {
         SceneManager.LoadScene("PersistantScene");
         SceneManager.LoadScene("DemolevelScene");
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("DemolevelScene"));
+        //SceneManager.SetActiveScene(SceneManager.GetSceneByName("DemolevelScene")); 
 
     }
 

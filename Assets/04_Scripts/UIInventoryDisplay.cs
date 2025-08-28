@@ -28,7 +28,7 @@ public void UpdateDisplay()
         }
         else
         {
-            Debug.LogError("Inventory unreachable");
+            //Debug.LogError("Inventory unreachable");
             itemCountText.text = "InventaireIntrouvable";
         }
     }
@@ -36,6 +36,7 @@ public void UpdateDisplay()
 
     void Update()
     {
+        UpdateDisplay();
         
     }
 
