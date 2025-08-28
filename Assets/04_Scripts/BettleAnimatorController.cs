@@ -5,7 +5,6 @@ using Unity.VisualScripting;
 
 namespace Ennemy
 {
-
     public class BettleAnimatorController : MonoBehaviour
     {
         [Header("Ranges")]
@@ -30,9 +29,7 @@ namespace Ennemy
         private bool hasEnteredAttack = false;
         private PlayerHealth playerHealth;
         private bool isDead = false;
-        private Collider[] colliders;
-
-       
+        private Collider[] colliders;       
 
         void Start()
         {
