@@ -21,13 +21,14 @@ public class UIInventoryDisplay : MonoBehaviour
 public void UpdateDisplay()
     {
         if (InventoryManager.Instance != null)
-        {
+        {            
             int count = InventoryManager.Instance.GetCount(itemId);
             itemCountText.text = $"{itemId}:{count}";
             
         }
         else
         {
+            Debug.LogError("Inventory unreachable");
             itemCountText.text = "InventaireIntrouvable";
         }
     }
