@@ -29,13 +29,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5426979884587349572}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 42.280746, y: 0.0023400814, z: -3.6298606}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 200, y: 200, z: 300}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &8625671238846227291
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -128,6 +128,9 @@ MonoBehaviour:
   pickupSoundVolume: 1
   id: Junk
   quantity: 5
+  randomValue: 0
+  minQuantity: 3
+  maxQuantity: 9
 --- !u!82 &4189409771472481792
 AudioSource:
   m_ObjectHideFlags: 0

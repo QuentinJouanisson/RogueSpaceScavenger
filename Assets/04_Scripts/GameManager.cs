@@ -26,7 +26,9 @@ public class GameManager : MonoBehaviour
     {
         FreezeCamera();
         Debug.Log("GameOver Triggered");
-        Invoke(nameof(ReloadStartScene), GameOverDuration);       
+        Invoke(nameof(ReloadStartScene), GameOverDuration);
+        if(InventoryManager.Instance != null)
+        InventoryManager.Instance.ClearInventory();
 
         
         

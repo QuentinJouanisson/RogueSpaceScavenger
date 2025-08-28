@@ -28,7 +28,7 @@ public static class SaveSystem
         }
         else
         {
-            Debug.Log("No save file found, loading empty inventory");
+            //Debug.Log("No save file found, loading empty inventory");
             return new InventoryData();
         }
     }
