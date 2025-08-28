@@ -49,8 +49,7 @@ namespace Ennemy
         {
             if (other.CompareTag(playerTag))
             {
-                playerInside = false; 
-                playerHealth = null; 
+                playerInside = false;                
             }
         }
 
