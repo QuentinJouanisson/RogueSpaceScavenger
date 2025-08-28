@@ -156,6 +156,9 @@ public class MotoController : MonoBehaviour
     }    
     public void OnDeath()
     {
+        impactParticles.Stop();
+        prolongedImpactParticles.Stop();
+        jumpParticles.Stop();
         GameManager.instance.TriggerGameOver();
         DisablePlayerControls();
         Explosion();        

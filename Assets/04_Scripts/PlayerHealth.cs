@@ -29,7 +29,7 @@ public class PlayerHealth : MonoBehaviour
             currentHealth -= amount;
             Debug.Log("Player took " + amount + "damages");
 
-            if (currentHealth < 0)
+            if (currentHealth <= 0)
             {
                 Die();
             }
